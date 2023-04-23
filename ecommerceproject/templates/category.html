@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+{{ category.description|truncatewords:155 }}
+{%  else %}
+Welcome to luxe Store where you cn buys different items
+{% endif %}
+{% endblock %}
+
+{% block title %}
+{% if category %}
+{{ category.name}}--Luxe line
+{% else %}
+See our new collection--Luxe line Store
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+<body>
+<div>
+    <div clss="row my_row_class">
+        <div class="mx-auto">
+        <p><a href="{% url 'shop:allProdCat' %}">Our product Collections</a></p>
+    </div>
+        </div>
+</div>
+{% endif %}
+
+<div class="mx_auto">
+    {% if category %}
+    <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}" style="width:750px;height:400px;margin-left:100px;">
+</div>
+<br>
+<div><h1 class="text-center my_title" >{{category.name}} </h1>
+<p class="text-justify">{{category.description}}</p>
+
+</div>
+<div>
+{% else %}
+<img class="my_image my_image_padding" src="{% static 'img/banner.jpg' %}" alt="Our products" style="width:1266px;height:668px;">
+</div>
+<br>
+<div>
+    <h1 class="text-center">Products collections</h1>
+    <p class="text-justify">
+A watch is a portable timepiece intended to be carried or worn by a person. It is designed to keep a consistent movement despite the motions caused by the person's activities. A wristwatch is designed to be worn around the wrist, attached by a watch strap or other type of bracelet, including metal bands, leather straps, or any other kind of bracelet. A pocket watch is designed for a person to carry in a pocket, often attached to a chain .    </p>
+</div>
+{% endif %}
+
+<div class="container">
+
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-4  col-lg-4" >
+            <div class="card text-center" style="min-width:18rem">
+                <a href="{{product.get_url}}"><img class="card-image-top my_image" src="{{product.image.url}}" alt="{{product.name}}" style="height:20rem;width:20rem;"></a>
+            <div class="card-body" >
+               <h4> {{product.name}}</h4>
+                <p>{{product.price}}</p>
+            </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+            <a href="?page={{pg}}"class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+</body>
+{% endblock %}
+
